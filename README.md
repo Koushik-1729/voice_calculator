@@ -23,8 +23,8 @@ Android or iOS device/emulator: Ensure that you have a physical or virtual devic
     - flutter pub get
  - Run the application:
     - flutter run
-By following all the steps The application should launch on your connected device/emulator.
-To run the project, use the following command:
+- By following all the steps The application should launch on your connected device/emulator.
+  To run the project, use the following command:
 
 
 To run the project, use the following command:
@@ -34,9 +34,11 @@ flutter run
 ```
 
 ##Usage:
-On the calculator interface, you can manually enter mathematical expressions by tapping the buttons corresponding to the numbers and operators.
-To perform calculations using voice input, tap the microphone button. Speak the mathematical expression clearly, and the app will convert it into text and display the result.
-The calculated result will be shown in real-time in the output section of the interface.
+- On the calculator interface, you can manually enter mathematical expressions by tapping the 
+  buttons corresponding to the numbers and operators.
+  To perform calculations using voice input, tap the microphone button. Speak the mathematical 
+  expression clearly, and the app will convert it into text and display the result.
+  The calculated result will be shown in real-time in the output section of the interface.
 
 ##Contributing:
 - Contributions to the Voice Calculator project are welcome. If you encounter any bugs, have - 
@@ -52,14 +54,3 @@ The calculated result will be shown in real-time in the output section of the in
 ##Contact
 - For any inquiries or additional information, please contact [koushik.yeruva02@gmail.com].
 
-
-
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
