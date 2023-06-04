@@ -16,17 +16,22 @@ Android or iOS device/emulator: Ensure that you have a physical or virtual devic
 
 ##Installation:
 - Clone the repository:
-    git clone https://github.com/your-username/voice-calculator.git
+    - git clone https://github.com/your-username/voice-calculator.git
 - Change to the project directory:
-    cd voice-calculator
+    - cd voice-calculator
 - Install the dependencies:
-    flutter pub get
+    - flutter pub get
  - Run the application:
-    flutter run
+    - flutter run
 By following all the steps The application should launch on your connected device/emulator.
 To run the project, use the following command:
 
+
+To run the project, use the following command:
+
 ```bash
+flutter run
+```
 
 ##Usage:
 On the calculator interface, you can manually enter mathematical expressions by tapping the buttons corresponding to the numbers and operators.
@@ -34,14 +39,18 @@ To perform calculations using voice input, tap the microphone button. Speak the 
 The calculated result will be shown in real-time in the output section of the interface.
 
 ##Contributing:
-Contributions to the Voice Calculator project are welcome. If you encounter any bugs, have suggestions for improvements, or would like to add new features, please open an issue or submit a pull request on the project's GitHub repository.
+- Contributions to the Voice Calculator project are welcome. If you encounter any bugs, have - 
+  suggestions for improvements, or would like to add new features, please open an issue or 
+  submit a pull request on the project's GitHub repository.
 
 ##Acknowledgements:
-The Voice Calculator app utilizes the speech_to_text package for speech recognition functionality.
-The mathematical expression parsing and evaluation are performed using the math_parser package.
+- The Voice Calculator app utilizes the speech_to_text package for speech recognition 
+  functionality.
+- The mathematical expression parsing and evaluation are performed using the math_parser 
+  package.
 
 ##Contact
-For any inquiries or additional information, please contact [koushik.yeruva02@gmail.com].
+- For any inquiries or additional information, please contact [koushik.yeruva02@gmail.com].
 
 
 
