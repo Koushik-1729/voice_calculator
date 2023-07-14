@@ -37,8 +37,17 @@ dependencies:
   cupertino_icons: ^1.0.2
   speech_to_text: ^6.1.1
   math_parser: ^1.5.1
-  get: ^4.6.5
+  get: ^4.3.0
   math_expressions: ^2.4.0
+  flutter_tts: ^3.7.0
+  flutter_sound: ^9.2.13
+  text_to_speech: ^0.2.3
+  get_storage:
+  flutter_neumorphic: ^3.0.3
+  resize: ^1.0.0
+  translator: ^0.1.7
+  units_converter: ^2.1.0
+
 
 dev_dependencies:
   flutter_test:
@@ -50,7 +59,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-
+  
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

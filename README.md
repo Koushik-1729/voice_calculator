@@ -2,17 +2,23 @@
 Voice Calculator is a Flutter application that allows users to perform calculations using their voice input. It provides a user interface with buttons for manual input as well as a voice recognition feature for hands-free operation.Here is an easy to use voice calculator to calculate numbers using multi operator and numbers! -all numeric number using (zero, one, two, three, four, five, six, seven, eight, nine, ten) -all operator +addition-plus,add +subtraction- minus, subtract +multiplication-multiply, multiply by, into, times +divide- divide, divide by -equal operator +speaking equal at last and using press equal button.
 
 ##Features
-Manual input: Users can enter mathematical expressions using the provided buttons on the calculator interface.
-Voice recognition: The app utilizes the SpeechToText plugin to convert user's spoken words into text and perform calculations based on the recognized input.
-Real-time output: The app displays both the user's input and the calculated result in real-time.
-Dark and light themes: Users can switch between dark and light themes for the calculator interface.
+- Manual input: Users can enter mathematical expressions using the provided buttons on the 
+  calculator interface.
+- Voice recognition: The app utilizes the SpeechToText plugin to convert user's spoken words 
+  into text and perform calculations based on the recognized input.
+- Real-time output: The app displays both the user's input and the calculated result in real- 
+  time.
+- Dark and light themes: Users can switch between dark and light themes for the calculator 
+  interface.
 
 ##Prerequisites
 
-Before running the application, make sure you have the following:
+- Before running the application, make sure you have the following:
 
-Flutter SDK: Install Flutter by following the instructions provided in the official Flutter documentation.
-Android or iOS device/emulator: Ensure that you have a physical or virtual device/emulator set up to run the Flutter application.
+- Flutter SDK: Install Flutter by following the instructions provided in the official Flutter - 
+  documentation.
+- Android or iOS device/emulator: Ensure that you have a physical or virtual device/emulator 
+  set up to run the Flutter application.
 
 ##Installation:
 - Clone the repository:

@@ -10,38 +10,41 @@ import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'calci.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+import 'package:units_converter/units_converter.dart';
+
 void main() {
   runApp(MyApp());
 }
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark().copyWith(
         primaryColor: const Color(0xFF0A0E21),
-        scaffoldBackgroundColor: const Color(0xFF0A0E21),
+        scaffoldBackgroundColor: Colors.white,
       ),
       debugShowCheckedModeBanner: false,
-      title: 'Voice Recognition',
+      title: 'VoCal',
       home: MyHomePage(),
     );
   }
 }
+const Color colorDark = Color(0xFF374352);
+const Color colorLight = Color(0xFFe6eeff);
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key);
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
-
 class _MyHomePageState extends State<MyHomePage> {
   SpeechToText _speechToText = SpeechToText();
+  FlutterTts _flutterTts = FlutterTts();
   bool _speechEnabled = false;
   String _lastWords = '';
   String final_value = '';
   bool _SpeechIconBool = false;
+
 
 
   @override
@@ -49,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _initSpeech();
   }
+
 
   /// This has to happen only once per app
   void _initSpeech() async {
@@ -66,8 +70,9 @@ class _MyHomePageState extends State<MyHomePage> {
   /// Note that there are also timeouts that each platform enforces
   /// and the SpeechToText plugin supports setting timeouts on the
   /// listen method.
-  getfinalOutput()  {
-    var expression = MathNodeExpression.fromString(
+  Future<void> getFinalOutput() async {
+     
+   var expression = MathNodeExpression.fromString(
         _lastWords
   ).calc(MathVariableValues.none);
   // Display the parsed expression in human-readable form
@@ -76,15 +81,19 @@ class _MyHomePageState extends State<MyHomePage> {
   setState(() {
     final_value = expression.toString();
   });
-  // final_value=expression.toString();
-  // return  final_value;
+
+  await Future.delayed(Duration(seconds: 2));
+
+  await _speak(final_value);
+}
+
+    Future<void> _speak(String text) async {
+    await _flutterTts.speak(final_value);
   }
 
   void _stopListening() async {
     await _speechToText.stop();
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   /// This is the callback that the SpeechToText plugin calls when
@@ -92,25 +101,31 @@ class _MyHomePageState extends State<MyHomePage> {
   void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
       _lastWords = result.recognizedWords;
-      getfinalOutput();
     });
+    getFinalOutput();
   }
 
+  @override
+  void dispose() {
+    _flutterTts.stop();
+    super.dispose();
+  }
+  bool darkMode=false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Voice Calci'),
-        backgroundColor: Color.fromARGB(255, 139, 105, 145)
+        title: Text('VoCal'),
+        backgroundColor: Color.fromARGB(37, 74, 0, 0),
       ),
-      body: Center(
+      body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            
             SizedBox(height: 20,),
-            Text('Input: $_lastWords',style: TextStyle(fontSize: 20),),
-            Text('Output: $final_value',style: TextStyle(fontSize: 20)),
+            Text('Input: $_lastWords', 
+            style: TextStyle(fontSize: 20,color: Colors.black)),
+            Text('Output: $final_value', style: TextStyle(fontSize: 20,color: Colors.black)),
             Expanded(
               child: Container(
                 padding: EdgeInsets.all(16),
@@ -123,22 +138,22 @@ class _MyHomePageState extends State<MyHomePage> {
                       // recognition is not yet ready or not supported on
                       // the target device
                       : _speechEnabled
-                          ? 'Tap the microphone to start listening...'
-                          : 'Speech not available',
+                      ? 'Tap the microphone to start listening...'
+                      : 'Speech not available',
+                      style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
+      ),
                 ),
               ),
-              
             ),
-                        MainScreenState(),
-                        // SizedBox(height: 100,)
-
+            MainScreenState(),
           ],
+
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed:
-            // If not yet listening for speech start, otherwise stop
-            _speechToText.isNotListening ? _startListening : _stopListening,
+        onPressed: _speechToText.isNotListening ? _startListening : _stopListening,
         tooltip: 'Listen',
         child: Icon(_speechToText.isNotListening ? Icons.mic_off : Icons.mic),
       ),

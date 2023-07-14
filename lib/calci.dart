@@ -1,10 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:math_parser/math_parser.dart';
 import 'package:math_parser/integrate.dart';
 import 'package:math_expressions/math_expressions.dart';
+import 'package:resize/resize.dart';
+
+
 
 class CalculateController extends GetxController {
   /* 
@@ -22,6 +26,15 @@ class CalculateController extends GetxController {
     Expression exp = p.parse(userInputFC);
     ContextModel ctx = ContextModel();
     double eval = exp.evaluate(EvaluationType.REAL, ctx);
+    userInputFC = userInputFC.replaceAllMapped(
+    RegExp(r'(\d+(\.\d+)?)%(\d+(\.\d+)?)'),
+    (match) {
+      double percentage = double.parse(match.group(1)!);
+      double value = double.parse(match.group(3)!);
+      double result = (percentage / 100) * value;
+      return result.toString();
+    },
+  );
 
     userOutput = eval.toString();
     update();
@@ -34,7 +47,7 @@ class CalculateController extends GetxController {
     update();
   }
 
-  /// Delet Button Pressed Func
+  /// Delete Button Pressed Func
   deleteBtnAction() {
     userInput = userInput.substring(0, userInput.length - 1);
     update();
@@ -63,13 +76,15 @@ class LightColors {
   static const operatorColor = Color(0xffEB6666);
   static const leftOperatorColor = Color.fromARGB(255, 1, 157, 128);
 }
+
 class CustomButton extends StatelessWidget {
   final Color color;
   final Color textColor;
   final String text;
   final VoidCallback buttonTapped;
 
-   const CustomButton({Key? key, 
+  const CustomButton({
+    Key? key,
     required this.color,
     required this.textColor,
     required this.text,
@@ -81,15 +96,31 @@ class CustomButton extends StatelessWidget {
     return GestureDetector(
       onTap: buttonTapped,
       child: Container(
+        width: 40,
+        height: 40,
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(50),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              offset: const Offset(3, 3),
+              blurRadius: 3,
+              spreadRadius: 1,
+            ),
+            BoxShadow(
+              color: Colors.white.withOpacity(0.7),
+              offset: const Offset(-3, -3),
+              blurRadius: 3,
+              spreadRadius: 1,
+            ),
+          ],
         ),
         child: Center(
           child: Text(
             text,
-            style: TextStyle(color: textColor, fontSize: 19),
+            style: TextStyle(color: Colors.white, fontSize: 20),
           ),
         ),
       ),
@@ -111,16 +142,14 @@ class ThemeController extends GetxController {
   }
 }
 
-class MainScreenState extends StatefulWidget{
+class MainScreenState extends StatefulWidget {
   MainScreenState({Key? key}) : super(key: key);
 
   @override
   _MainScreenState createState() => _MainScreenState();
 }
 
-
 class _MainScreenState extends State<MainScreenState> {
-
   final List<String> buttons = [
     "C",
     "DEL",
@@ -143,7 +172,7 @@ class _MainScreenState extends State<MainScreenState> {
     "ANS",
     "=",
   ];
-  
+
   @override
   void initState() {
     super.initState();
@@ -153,57 +182,33 @@ class _MainScreenState extends State<MainScreenState> {
   String final_value = "";
   String final_ans = '';
 
-  /////////////////////////////////////
-  //@CodeWithFlexz on Instagram
-  //
-  //AmirBayat0 on Github
-  //Programming with Flexz on Youtube
-  /////////////////////////////////////
-  // @override
-
-  void  validate(val) {
-    
-    if(val=='+' || val=='-' || val=='x' || val=='/' || val=='%') {
+  void validate(val) {
+    if (val == '+' || val == '-' || val == 'x' || val == '/' || val == '%') {
       val = val.replaceAll("x", "*");
-     setState(() {
-             calval += ' $val '; 
-
-     }); 
-
-
+      setState(() {
+        calval += ' $val ';
+      });
+    } else if (val == 'ANS') {
+      setState(() {
+        calval += final_ans;
+      });
+    } else {
+      setState(() {
+        calval += val;
+      });
+    }
   }
-  else if(val=='ANS'){
-    setState(() {
-      calval += final_ans;
 
-      
+  getfinalOutput() {
+    var expression = MathNodeExpression.fromString(calval).calc(MathVariableValues.none);
+
+    setState(() {
+      final_value = '= ${expression.toString()}';
+      final_ans = final_value.replaceAll('=', '');
     });
   }
-  else {
-    setState(() {
-      calval += val;
-    });
-    
-  }
-  }
-  getfinalOutput()  {
-    var expression = MathNodeExpression.fromString(
-        calval
-  ).calc(MathVariableValues.none);
-  // Display the parsed expression in human-readable form
-  //print(expression);
 
-  setState(() {
-     
-    final_value = '= ${expression.toString()}';
-          final_ans = final_value.replaceAll('=', '');
-
-  });
-  // final_value=expression.toString();
-  // return  final_value;
-  }
-
-  void deletesatete(){
+  void deletesatete() {
     setState(() {
       final_value = '';
       calval = '';
@@ -213,10 +218,8 @@ class _MainScreenState extends State<MainScreenState> {
   void removesinglevalue() {
     setState(() {
       calval = calval.substring(0, calval.length - 1);
-
     });
   }
-  
 
   bool isOperator(String y) {
     if (y == "%" || y == "/" || y == "x" || y == "-" || y == "+" || y == "=") {
@@ -228,95 +231,78 @@ class _MainScreenState extends State<MainScreenState> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height/1.5,
+      height: MediaQuery.of(context).size.height / 1.5,
       width: MediaQuery.of(context).size.width,
-       child : Column(children: [
-        Text('$calval  $final_value',style: TextStyle(fontSize: 20)),
-        SizedBox(height: 20,),
-        Expanded(
-        flex: 5,
-        child: Container(
-          // height: 500,
-          padding: const EdgeInsets.all(3),
-          decoration: BoxDecoration(
-              color: 
-                   DarkColors.sheetBgColor,
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(30), topRight: Radius.circular(30))),
-          child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: buttons.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4),
-              itemBuilder: (contex, index) {
-                switch (index) {
-
-                  /// CLEAR BTN
-                  case 0:
-                    return CustomButton(
+      child: Column(
+        children: [
+          Text(
+            '$calval  $final_value',
+            style: TextStyle(fontSize: 20,color: Colors.black),
+          ),
+          SizedBox(height: 20),
+          Expanded(
+            flex: 5,
+            child: Container(
+              padding: const EdgeInsets.all(3),
+              child: GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: buttons.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                ),
+                itemBuilder: (context, index) {
+                  switch (index) {
+                    case 0:
+                      return CustomButton(
                         buttonTapped: () {
                           deletesatete();
                         },
-                        color: 
-                             DarkColors.btnBgColor,
-                        textColor:  DarkColors.leftOperatorColor,
-                        text: buttons[index]);
-
-                  /// DELETE BTN
-                  case 1:
-                    return CustomButton(
+                        color: DarkColors.btnBgColor,
+                        textColor: DarkColors.leftOperatorColor,
+                        text: buttons[index],
+                      );
+                    case 1:
+                      return CustomButton(
                         buttonTapped: () {
                           removesinglevalue();
-                          // controller.deleteBtnAction();
                         },
-                        color: 
-                             DarkColors.btnBgColor,
-                           
-                        textColor: 
-                             DarkColors.leftOperatorColor,
-                        text: buttons[index]);
-
-                  /// EQUAL BTN
-                  case 19:
-                    return CustomButton(
+                        color: DarkColors.btnBgColor,
+                        textColor: DarkColors.leftOperatorColor,
+                        text: buttons[index],
+                      );
+                    case 19:
+                      return CustomButton(
                         buttonTapped: () {
                           getfinalOutput();
-
-                          // controller.equalPressed();
                         },
-                        color: 
-                             DarkColors.btnBgColor,
-                        textColor: 
-                             DarkColors.leftOperatorColor,
-                        text: buttons[index]);
-
-                  default:
-                    return CustomButton(
+                        color: DarkColors.btnBgColor,
+                        textColor: DarkColors.leftOperatorColor,
+                        text: buttons[index],
+                      );
+                    default:
+                      return CustomButton(
                         buttonTapped: () {
                           validate(buttons[index]);
-                                                    // print(index);
-                                                    // print(buttons[index]);
-
-                          // controller.onBtnTapped(buttons, index);
                         },
-                        color: 
-                             DarkColors.btnBgColor,
+                        color: DarkColors.btnBgColor,
                         textColor: isOperator(buttons[index])
                             ? LightColors.operatorColor
-                            
-                                : Colors.black,
-                        text: buttons[index]);
-                }
-              }),
-        ))]));
+                            : Colors.black,
+                        text: buttons[index],
+                      );
+                  }
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
-
-  /// Out put Section - Show Result
-  Expanded outPutSection(
-      ThemeController themeController, CalculateController controller) {
-    return Expanded(
-        child: Column(
+Expanded outPutSection(ThemeController themeController, CalculateController controller) {
+  return Expanded(
+    child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
@@ -324,9 +310,9 @@ class _MainScreenState extends State<MainScreenState> {
           width: 100,
           height: 45,
           decoration: BoxDecoration(
-              color: 
-                   DarkColors.sheetBgColor,
-              borderRadius: BorderRadius.circular(20)),
+            color: DarkColors.sheetBgColor,
+            borderRadius: BorderRadius.circular(20),
+          ),
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -337,7 +323,7 @@ class _MainScreenState extends State<MainScreenState> {
                   },
                   child: Icon(
                     Icons.light_mode_outlined,
-                    color:  Colors.black,
+                    color: Colors.black,
                     size: 25,
                   ),
                 ),
@@ -350,10 +336,10 @@ class _MainScreenState extends State<MainScreenState> {
                   },
                   child: Icon(
                     Icons.dark_mode_outlined,
-                    color:  Colors.grey,
+                    color: Colors.grey,
                     size: 25,
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -364,12 +350,13 @@ class _MainScreenState extends State<MainScreenState> {
             children: [
               Container(
                 alignment: Alignment.centerRight,
-                child: Text(
-                  controller.userInput,
-                  style: TextStyle(
-                      color:
-                            Colors.black,
-                      fontSize: 25),
+                child: TextField(
+                  readOnly: true,
+                  controller: TextEditingController(text: controller.userInput),
+                  style: TextStyle(color: Colors.black, fontSize: 25),
+                  cursorColor: Colors.blue, // Customize the cursor color
+                  cursorWidth: 2.0, // Customize the cursor width
+                  showCursor: true, // Show the cursor
                 ),
               ),
               const SizedBox(
@@ -377,25 +364,21 @@ class _MainScreenState extends State<MainScreenState> {
               ),
               Container(
                 alignment: Alignment.bottomRight,
-                child: Text(controller.userOutput,
-                    style: TextStyle(
-                        color: 
-                          
-                            Colors.black,
-                        fontSize: 32)),
+                child: TextField(
+                  readOnly: true,
+                  controller: TextEditingController(text: controller.userOutput),
+                  style: TextStyle(color: Colors.black, fontSize: 32),
+                  cursorColor: Colors.blue, // Customize the cursor color
+                  cursorWidth: 2.0, // Customize the cursor width
+                  showCursor: true, // Show the cursor
+                ),
               ),
             ],
           ),
+
         ),
       ],
-    ));
-  }
-  }
-
-  
-
-
-  ///
-  
-
-
+    ),
+  );
+}
+}
